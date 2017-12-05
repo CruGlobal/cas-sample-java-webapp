@@ -10,20 +10,13 @@ the application server in the [`web.xml`](https://github.com/UniconLabs/cas-samp
 
 ## Build
 
-* Create a Java keystore at `/etc/cas/jetty/thekeystore` with the password `changeit`.
-* Import your server certificate inside this keystore.
-
 ```bash
 mvn clean package jetty:run-forked
 ```
 
 The application will be available on:
 ```bash
-http://localhost:9080/sample
-```
-and
-```bash
-https://localhost:9443/sample
+http://localhost:8080/sample
 ```
 
  
