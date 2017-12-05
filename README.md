@@ -1,6 +1,8 @@
 # Example CASified Java Web Application
 
-This is sample java web application that exercises the CAS protocol features via the Java CAS Client.
+This is a sample java web application that exercises the CAS protocol features via the Java CAS Client.
+This repo is a fork of the [official sample app](https://github.com/cas-projects/cas-sample-java-webapp),
+with small tweaks to be a more effective example of configuration for apps at Cru.
 
 Configure
 ---------
@@ -10,20 +12,13 @@ the application server in the [`web.xml`](https://github.com/UniconLabs/cas-samp
 
 ## Build
 
-* Create a Java keystore at `/etc/cas/jetty/thekeystore` with the password `changeit`.
-* Import your server certificate inside this keystore.
-
 ```bash
 mvn clean package jetty:run-forked
 ```
 
 The application will be available on:
 ```bash
-http://localhost:9080/sample
-```
-and
-```bash
-https://localhost:9443/sample
+http://localhost:8080/sample
 ```
 
  
