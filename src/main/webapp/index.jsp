@@ -4,6 +4,8 @@
 <%@ page import="java.util.Iterator" %>
 <%@ page import="java.util.List" %>
 <%@ page import="org.jasig.cas.client.authentication.AttributePrincipal" %>
+<%@ page import="java.util.Enumeration" %>
+<%@ page import="java.util.Collections" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -68,6 +70,38 @@
         out.println("<pre>The user principal is empty from the request object. Review the wrapper filter configuration.</pre>");
     }
 %>
+
+<p>
+    CNCUsername:
+    <% out.print(request.getHeader("CNCUsername")); %>
+</p>
+<p>
+    CNCUsernames:
+    <%
+        Enumeration<String> usernames = request.getHeaders("CNCUsername");
+        List<String> usernamesAsList = Collections.list(usernames);
+        out.print(usernamesAsList);
+    %>
+</p>
+
+<%
+    Enumeration<String> headerNames = request.getHeaderNames();
+    if (headerNames != null) {
+        out.println("<b>Header Names:</b>");
+        out.println("<ul>");
+        List<String> headerNamesAsList = Collections.list(headerNames);
+        Iterator<String> attributeNames = headerNamesAsList.iterator();
+        while (attributeNames.hasNext()) {
+            out.println("<li>");
+            out.println(attributeNames.next());
+            out.println("</li>");
+        }
+        out.println("</ul>");
+    } else {
+        out.println("<pre>Header names are not provided by the servlet container.</pre>");
+    }
+%>
+
 
 </body>
 </html>
