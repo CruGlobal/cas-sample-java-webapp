@@ -1,6 +1,8 @@
 # Example CASified Java Web Application
 
-This is sample java web application that exercises the CAS protocol features via the Java CAS Client.
+This is a sample java web application that exercises the CAS protocol features via the Java CAS Client.
+This repo is a fork of the [official sample app](https://github.com/cas-projects/cas-sample-java-webapp),
+with small tweaks to be a more effective example of configuration for apps at Cru.
 
 Configure
 ---------
