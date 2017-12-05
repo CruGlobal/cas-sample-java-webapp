@@ -8,7 +8,7 @@ Configure
 ---------
 
 - Adjust the url endpoints of the CAS server and 
-the application server in the [`web.xml`](https://github.com/UniconLabs/cas-sample-java-webapp/blob/master/src/main/webapp/WEB-INF/web.xml) file.
+the application server in the [`web.xml`](src/main/webapp/WEB-INF/web.xml) file.
 
 ## Build
 
