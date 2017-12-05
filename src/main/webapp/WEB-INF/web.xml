@@ -69,11 +69,11 @@
             <param-name>proxyCallbackUrl</param-name>
             <param-value>https://mmoayyed.unicon.net:9443/sample/proxyUrl</param-value>
         </init-param>
-        -->
         <init-param>
             <param-name>authn_method</param-name>
             <param-value>mfa-duo</param-value>
         </init-param>
+        -->
     </filter>
 
     <filter>
