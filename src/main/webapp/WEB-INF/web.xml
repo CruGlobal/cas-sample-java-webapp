@@ -52,6 +52,16 @@
         <filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
     </filter>
 
+    <!-- Cru's cas->siebel glue filter: -->
+    <filter>
+        <filter-name>Copy User to Header Filter</filter-name>
+        <filter-class>org.cru.userheader.CopyUserToHeaderFilter</filter-class>
+        <init-param>
+            <param-name>headerName</param-name>
+            <param-value>CNCUsername</param-value>
+        </init-param>
+    </filter>
+
     <filter-mapping>
         <filter-name>CAS Single Sign Out Filter</filter-name>
         <url-pattern>/*</url-pattern>
@@ -71,16 +81,6 @@
         <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
-    <!-- Cru's cas->siebel glue filter: -->
-    <filter>
-        <filter-name>Copy User to Header Filter</filter-name>
-        <filter-class>org.cru.userheader.CopyUserToHeaderFilter</filter-class>
-        <init-param>
-            <param-name>headerName</param-name>
-            <param-value>CNCUsername</param-value>
-        </init-param>
-    </filter>
 
     <filter-mapping>
         <filter-name>Copy User to Header Filter</filter-name>
