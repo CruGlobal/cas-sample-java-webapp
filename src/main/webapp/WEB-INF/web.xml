@@ -6,37 +6,38 @@
 
     <context-param>
         <param-name>casServerUrlPrefix</param-name>
-        <param-value>https://signon.cru.org/cas</param-value>
+        <param-value>https://signin.cru.org/cas</param-value>
     </context-param>
 
     <context-param>
         <param-name>casServerLoginUrl</param-name>
-        <param-value>https://signon.cru.org/cas/login</param-value>
+        <param-value>https://signin.cru.org/cas/login</param-value>
     </context-param>
 
     <context-param>
         <param-name>serverName</param-name>
-        <!-- replace with the URL of the siebel instance -->
-        <param-value>http://localhost:8080</param-value>
+        <!-- replace with the loadbalanced URL of the peoplesoft instance -->
+        <param-value>http://localhost.cru.org:8080</param-value>
     </context-param>
 
-    <filter>
-        <filter-name>CAS Single Sign Out Filter</filter-name>
-        <filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
-    </filter>
-
+<!--
     <listener>
         <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
     </listener>
+-->
 
     <filter>
         <filter-name>CAS Authentication Filter</filter-name>
         <filter-class>org.jasig.cas.client.authentication.AuthenticationFilter</filter-class>
+        <init-param>
+            <param-name>ignorePattern</param-name>
+            <param-value>.*/SchedulerTransfer.*</param-value> <!-- TODO: more precise regex -->
+        </init-param>
     </filter>
 
     <filter>
         <filter-name>CAS Validation Filter</filter-name>
-        <filter-class>org.jasig.cas.client.validation.Cas30ProxyReceivingTicketValidationFilter</filter-class>
+        <filter-class>org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter</filter-class>
         <init-param>
             <param-name>redirectAfterValidation</param-name>
             <param-value>true</param-value>
@@ -52,20 +53,86 @@
         <filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
     </filter>
 
-    <!-- Cru's cas->siebel glue filter: -->
+    <!-- Cru's workaround for single sign out filter problem -->
+<!--
     <filter>
-        <filter-name>Copy User to Header Filter</filter-name>
-        <filter-class>org.cru.userheader.CopyUserToHeaderFilter</filter-class>
+        <filter-name>CAS Single Sign Out Filter</filter-name>
+        <filter-class>org.cru.cas.client.integration.EntityPreservingSingleSignOutFilter</filter-class>
         <init-param>
-            <param-name>headerName</param-name>
-            <param-value>CNCUsername</param-value>
+            <param-name>logoutPath</param-name>
+            <param-value>/node-logout</param-value>
         </init-param>
     </filter>
+-->
+    <filter>
+        <filter-name>CAS Single Sign Out Filter</filter-name>
+        <filter-class>org.cru.cas.client.integration.LogoutListFilter</filter-class>
+        <init-param>
+            <param-name>logoutPath</param-name>
+            <param-value>/node-logout</param-value>
+        </init-param>
+    </filter>
+
+
+    <!-- Cru's cas->pshr glue filters: -->
+    <filter>
+        <filter-name>Copy Cas Attributes to Headers Filter</filter-name>
+        <filter-class>org.cru.cas.client.integration.CopyCasAttributesToHeadersFilter</filter-class>
+        <init-param>
+            <param-name>attributeMapping</param-name>
+            <!--
+            <param-value>
+                email=CAS_USER
+                usEmployeeId=CAS_emplid
+            </param-value>
+            -->
+            <param-value>
+                username=CAS_USER
+                emplid=CAS_emplid
+            </param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>Logout Broadcast Filter</filter-name>
+        <filter-class>org.cru.cas.client.integration.LogoutBroadcastFilter</filter-class>
+
+        <init-param>
+            <param-name>recipientHosts</param-name>
+            <param-value>
+                http://localhost:8080
+                http://localhost.cru.org:8080
+            </param-value>
+        </init-param>
+
+        <init-param>
+            <param-name>recipientPath</param-name>
+            <param-value>/sample/node-logout</param-value>
+        </init-param>
+    </filter>
+
+    <filter>
+        <filter-name>Eager Session Trigger Filter</filter-name>
+        <filter-class>org.cru.cas.client.integration.SessionFilter</filter-class>
+    </filter>
+
+
+    <filter-mapping>
+        <filter-name>Logout Broadcast Filter</filter-name>
+        <url-pattern>/cluster-logout</url-pattern>
+    </filter-mapping>
 
     <filter-mapping>
         <filter-name>CAS Single Sign Out Filter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <!--
+        <filter-mapping>
+            <filter-name>Eager Session Trigger Filter</filter-name>
+            <url-pattern>/*</url-pattern>
+        </filter-mapping>
+    -->
 
     <filter-mapping>
         <filter-name>CAS Validation Filter</filter-name>
@@ -83,9 +150,18 @@
     </filter-mapping>
 
     <filter-mapping>
-        <filter-name>Copy User to Header Filter</filter-name>
+        <filter-name>Copy Cas Attributes to Headers Filter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+<!--
+    <filter-mapping>
+        <filter-name>Cookie-Killing Redirecting Filter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+-->
+
+
 
     <welcome-file-list>
         <welcome-file>

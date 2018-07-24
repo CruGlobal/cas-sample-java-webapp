@@ -72,15 +72,28 @@
 %>
 
 <p>
-    CNCUsername:
-    <% out.print(request.getHeader("CNCUsername")); %>
+    CAS_USER:
+    <% out.print(request.getHeader("CAS_USER")); %>
 </p>
 <p>
-    CNCUsernames:
+    CAS_USERs:
     <%
-        Enumeration<String> usernames = request.getHeaders("CNCUsername");
+        Enumeration<String> usernames = request.getHeaders("CAS_USER");
         List<String> usernamesAsList = Collections.list(usernames);
         out.print(usernamesAsList);
+    %>
+</p>
+
+<p>
+    CAS_emplid:
+    <% out.print(request.getHeader("CAS_emplid")); %>
+</p>
+<p>
+    CAS_emplids:
+    <%
+        Enumeration<String> emplids = request.getHeaders("CAS_emplid");
+        List<String> emplidsAsList = Collections.list(emplids);
+        out.print(emplidsAsList);
     %>
 </p>
 
