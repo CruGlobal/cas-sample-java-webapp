@@ -73,7 +73,7 @@
     <!-- Cru's cas->siebel glue filter: -->
     <filter>
         <filter-name>Copy User to Header Filter</filter-name>
-        <filter-class>org.cru.userheader.CopyUserToHeaderFilter</filter-class>
+        <filter-class>org.cru.cas.client.integration.CopyUserToHeaderFilter</filter-class>
         <init-param>
             <param-name>headerName</param-name>
             <param-value>CNCUsername</param-value>
